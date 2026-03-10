@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Percentage Calculator — Free Online Tool | BountyWall</title>
+  <meta name="description" content="Free online percentage calculator. Calculate what percent of a number is, percentage increase or decrease, percentage difference, and more. Instant results."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="icon" type="image/x-icon" href="https://bountywall.com/bounty.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --off-white:#f4f7fd; --blue-50:#eff5ff; --blue-100:#dbeafe; --blue-200:#bfdbfe;
+      --blue-300:#93c5fd; --blue-400:#60a5fa; --blue-500:#3b82f6; --blue-600:#2563eb;
+      --blue-700:#1d4ed8; --ink:#0d1b2e; --ink-mid:#3d5168; --ink-light:#8fa3bb;
+      --border:#d6e4f7; --border-dark:#b8d0ed; --success:#059669; --success-bg:#ecfdf5;
+      --sol-purple:#9945ff; --sol-green:#14f195;
+      --mono:'DM Mono',monospace; --serif:'Instrument Serif',serif; --sans:'DM Sans',sans-serif;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--off-white); color:var(--ink); font-family:var(--sans); min-height:100vh; }
+    body::before { content:''; position:fixed; inset:0; background-image:radial-gradient(circle,#c3d9f5 1px,transparent 1px); background-size:28px 28px; opacity:0.4; pointer-events:none; z-index:0; }
+    body::after { content:''; position:fixed; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--sol-purple),var(--sol-green),var(--blue-600)); z-index:200; }
+
+    header { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.93); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); padding:0 44px; height:64px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { display:flex; align-items:baseline; gap:1px; text-decoration:none; }
+    .logo-main { font-family:var(--serif); font-size:23px; color:var(--blue-700); }
+    .logo-dot { font-family:var(--mono); font-size:14px; color:var(--blue-400); }
+    .logo-tld { font-family:var(--mono); font-size:13px; color:var(--ink-light); }
+    .header-nav { display:flex; align-items:center; gap:16px; }
+    .header-nav a { font-family:var(--mono); font-size:11px; color:var(--ink-light); text-decoration:none; transition:color 0.12s; }
+    .header-nav a:hover { color:var(--blue-600); }
+
+    main { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:52px 28px 100px; }
+
+    .hero { text-align:center; margin-bottom:44px; animation:fadeUp 0.3s ease both; }
+    .hero h1 { font-family:var(--serif); font-size:clamp(28px,4vw,44px); line-height:1.08; letter-spacing:-0.5px; color:var(--ink); margin-bottom:10px; }
+    .hero h1 em { font-style:italic; color:var(--blue-600); }
+    .hero-sub { font-family:var(--mono); font-size:11px; color:var(--ink-light); line-height:1.9; }
+
+    /* Tab switcher */
+    .tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:28px; animation:fadeUp 0.35s ease both; animation-delay:0.05s; }
+    .tab { font-family:var(--mono); font-size:11px; padding:7px 14px; border-radius:20px; border:1px solid var(--border); background:white; color:var(--ink-mid); cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+    .tab:hover { border-color:var(--blue-400); color:var(--blue-600); }
+    .tab.active { background:var(--blue-600); border-color:var(--blue-600); color:white; }
+
+    /* Calculator card */
+    .calc-card { background:white; border:1px solid var(--border); border-radius:14px; padding:32px; box-shadow:0 2px 18px rgba(30,58,95,0.07); animation:fadeUp 0.4s ease both; animation-delay:0.1s; margin-bottom:20px; }
+    .calc-title { font-family:var(--serif); font-size:20px; color:var(--ink); margin-bottom:6px; }
+    .calc-desc { font-family:var(--mono); font-size:10.5px; color:var(--ink-light); line-height:1.8; margin-bottom:28px; }
+
+    .calc-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+    .calc-label { font-family:var(--mono); font-size:11px; color:var(--ink-mid); white-space:nowrap; min-width:30px; }
+    .calc-input { background:var(--blue-50); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-family:var(--mono); font-size:15px; color:var(--ink); outline:none; transition:border-color 0.15s; width:140px; }
+    .calc-input:focus { border-color:var(--blue-400); background:white; }
+    .calc-connector { font-family:var(--mono); font-size:11px; color:var(--ink-light); }
+
+    .calc-result-wrap { background:var(--blue-50); border:1.5px solid var(--blue-200); border-radius:10px; padding:20px 24px; margin-top:20px; display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:70px; }
+    .calc-result-label { font-family:var(--mono); font-size:10px; color:var(--ink-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+    .calc-result-value { font-family:var(--mono); font-size:28px; font-weight:500; color:var(--blue-700); letter-spacing:-0.5px; }
+    .calc-result-value.positive { color:var(--success); }
+    .calc-result-value.negative { color:#dc2626; }
+    .copy-btn { background:none; border:1px solid var(--border-dark); border-radius:6px; padding:6px 12px; font-family:var(--mono); font-size:10px; color:var(--ink-light); cursor:pointer; transition:all 0.12s; white-space:nowrap; flex-shrink:0; }
+    .copy-btn:hover { border-color:var(--blue-400); color:var(--blue-600); }
+    .copy-btn.copied { border-color:var(--success); color:var(--success); }
+
+    .calc-formula { font-family:var(--mono); font-size:10px; color:var(--ink-light); margin-top:12px; line-height:1.7; }
+
+    /* Info cards */
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:28px; animation:fadeUp 0.45s ease both; animation-delay:0.15s; }
+    .info-card { background:white; border:1px solid var(--border); border-radius:10px; padding:18px 20px; }
+    .info-card-title { font-family:var(--mono); font-size:10px; color:var(--ink-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+    .info-card-body { font-family:var(--mono); font-size:11px; color:var(--ink-mid); line-height:1.8; }
+
+    footer { position:relative; z-index:1; text-align:center; padding:28px; font-family:var(--mono); font-size:10px; color:var(--ink-light); border-top:1px solid var(--border); letter-spacing:0.4px; line-height:2.2; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+    @media(max-width:640px){
+      header{padding:0 18px;} main{padding:28px 14px 60px;}
+      .calc-input{width:110px;}
+      .info-grid{grid-template-columns:1fr;}
+      .calc-result-value{font-size:22px;}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://bountywall.com/index.html">
+    <span class="logo-main">BountyWall</span>
+    <span class="logo-dot">.</span>
+    <span class="logo-tld">com</span>
+  </a>
+  <div class="header-nav">
+    <a href="/">All Tools</a>
+    <a href="https://bountywall.com/earn.html">Earn SOL</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Percentage <em>Calculator</em></h1>
+    <p class="hero-sub">six calculation modes · instant results · free forever</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(0)">X% of Y</button>
+    <button class="tab" onclick="switchTab(1)">X is what % of Y</button>
+    <button class="tab" onclick="switchTab(2)">% Increase / Decrease</button>
+    <button class="tab" onclick="switchTab(3)">% Difference</button>
+    <button class="tab" onclick="switchTab(4)">X% more than Y</button>
+    <button class="tab" onclick="switchTab(5)">Original from %</button>
+  </div>
+
+  <!-- Mode 0: X% of Y -->
+  <div class="calc-card" id="mode0">
+    <div class="calc-title">What is X% of Y?</div>
+    <div class="calc-desc">Find a percentage of any number. e.g. "What is 20% of 150?"</div>
+    <div class="calc-row">
+      <span class="calc-label">What is</span>
+      <input class="calc-input" id="m0_pct" type="number" placeholder="20" min="0" oninput="calc0()"/>
+      <span class="calc-connector">% of</span>
+      <input class="calc-input" id="m0_num" type="number" placeholder="150" oninput="calc0()"/>
+      <span class="calc-connector">?</span>
+    </div>
+    <div class="calc-result-wrap">
+      <div>
+        <div class="calc-result-label">Result</div>
+        <div class="calc-result-value" id="m0_result">—</div>
+      </div>
+      <button class="copy-btn" onclick="copyResult('m0_result', this)">Copy</button>
+    </div>
+    <div class="calc-formula" id="m0_formula"></div>
+  </div>
+
+  <!-- Mode 1: X is what % of Y -->
+  <div class="calc-card" id="mode1" style="display:none">
+    <div class="calc-title">X is what percent of Y?</div>
+    <div class="calc-desc">Find what percentage one number is of another. e.g. "30 is what % of 150?"</div>
+    <div class="calc-row">
+      <input class="calc-input" id="m1_x" type="number" placeholder="30" oninput="calc1()"/>
+      <span class="calc-connector">is what % of</span>
+      <input class="calc-input" id="m1_y" type="number" placeholder="150" oninput="calc1()"/>
+    </div>
+    <div class="calc-result-wrap">
+      <div>
+        <div class="calc-result-label">Result</div>
+        <div class="calc-result-value" id="m1_result">—</div>
+      </div>
+      <button class="copy-btn" onclick="copyResult('m1_result', this)">Copy</button>
+    </div>
+    <div class="calc-formula" id="m1_formula"></div>
+  </div>
+
+  <!-- Mode 2: % increase / decrease -->
+  <div class="calc-card" id="mode2" style="display:none">
+    <div class="calc-title">Percentage Increase / Decrease</div>
+    <div class="calc-desc">Find the percentage change from one value to another. e.g. from 80 to 100.</div>
+    <div class="calc-row">
+      <span class="calc-label">From</span>
+      <input class="calc-input" id="m2_from" type="number" placeholder="80" oninput="calc2()"/>
+      <span class="calc-connector">to</span>
+      <input class="calc-input" id="m2_to" type="number" placeholder="100" oninput="calc2()"/>
+    </div>
+    <div class="calc-result-wrap">
+      <div>
+        <div class="calc-result-label">Percentage Change</div>
+        <div class="calc-result-value" id="m2_result">—</div>
+      </div>
+      <button class="copy-btn" onclick="copyResult('m2_result', this)">Copy</button>
+    </div>
+    <div class="calc-formula" id="m2_formula"></div>
+  </div>
+
+  <!-- Mode 3: % difference -->
+  <div class="calc-card" id="mode3" style="display:none">
+    <div class="calc-title">Percentage Difference</div>
+    <div class="calc-desc">The relative difference between two values with no direction. e.g. between 40 and 60.</div>
+    <div class="calc-row">
+      <span class="calc-label">Between</span>
+      <input class="calc-input" id="m3_a" type="number" placeholder="40" oninput="calc3()"/>
+      <span class="calc-connector">and</span>
+      <input class="calc-input" id="m3_b" type="number" placeholder="60" oninput="calc3()"/>
+    </div>
+    <div class="calc-result-wrap">
+      <div>
+        <div class="calc-result-label">Percentage Difference</div>
+        <div class="calc-result-value" id="m3_result">—</div>
+      </div>
+      <button class="copy-btn" onclick="copyResult('m3_result', this)">Copy</button>
+    </div>
+    <div class="calc-formula" id="m3_formula"></div>
+  </div>
+
+  <!-- Mode 4: X% more than Y -->
+  <div class="calc-card" id="mode4" style="display:none">
+    <div class="calc-title">X% More / Less Than Y</div>
+    <div class="calc-desc">Add or subtract a percentage from a number. e.g. "15% more than 200".</div>
+    <div class="calc-row">
+      <input class="calc-input" id="m4_pct" type="number" placeholder="15" oninput="calc4()"/>
+      <span class="calc-connector">% more than</span>
+      <input class="calc-input" id="m4_num" type="number" placeholder="200" oninput="calc4()"/>
+    </div>
+    <div class="calc-row" style="margin-top:4px;">
+      <span class="calc-label" style="min-width:auto;font-size:10px;color:var(--ink-light);">Also:</span>
+      <input class="calc-input" id="m4_pct2" type="number" placeholder="15" oninput="calc4b()"/>
+      <span class="calc-connector">% less than</span>
+      <input class="calc-input" id="m4_num2" type="number" placeholder="200" oninput="calc4b()"/>
+    </div>
+    <div class="calc-result-wrap">
+      <div style="display:flex;gap:32px;flex-wrap:wrap;">
+        <div>
+          <div class="calc-result-label">More</div>
+          <div class="calc-result-value positive" id="m4_result_more">—</div>
+        </div>
+        <div>
+          <div class="calc-result-label">Less</div>
+          <div class="calc-result-value negative" id="m4_result_less">—</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyResult('m4_result_more', this)">Copy More</button>
+    </div>
+    <div class="calc-formula" id="m4_formula"></div>
+  </div>
+
+  <!-- Mode 5: Original from % -->
+  <div class="calc-card" id="mode5" style="display:none">
+    <div class="calc-title">Find the Original Value</div>
+    <div class="calc-desc">Work backwards — find what number was before the percentage change. e.g. "After a 20% increase, the value is 120. What was the original?"</div>
+    <div class="calc-row">
+      <span class="calc-label">Value</span>
+      <input class="calc-input" id="m5_val" type="number" placeholder="120" oninput="calc5()"/>
+      <span class="calc-connector">is after a</span>
+      <input class="calc-input" id="m5_pct" type="number" placeholder="20" oninput="calc5()"/>
+      <span class="calc-connector">% increase</span>
+    </div>
+    <div class="calc-row" style="margin-top:4px;">
+      <span class="calc-label" style="min-width:auto;font-size:10px;color:var(--ink-light);">Or after a</span>
+      <input class="calc-input" id="m5_pct2" type="number" placeholder="20" oninput="calc5b()"/>
+      <span class="calc-connector">% decrease, value is</span>
+      <input class="calc-input" id="m5_val2" type="number" placeholder="80" oninput="calc5b()"/>
+    </div>
+    <div class="calc-result-wrap">
+      <div style="display:flex;gap:32px;flex-wrap:wrap;">
+        <div>
+          <div class="calc-result-label">Original (from increase)</div>
+          <div class="calc-result-value" id="m5_result_inc">—</div>
+        </div>
+        <div>
+          <div class="calc-result-label">Original (from decrease)</div>
+          <div class="calc-result-value" id="m5_result_dec">—</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyResult('m5_result_inc', this)">Copy</button>
+    </div>
+    <div class="calc-formula" id="m5_formula"></div>
+  </div>
+
+  <!-- Info cards -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title">How to calculate % of a number</div>
+      <div class="info-card-body">Multiply the number by the percentage, then divide by 100.<br/><br/>Example: 25% of 80 = (25 × 80) ÷ 100 = 20</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">How to calculate % increase</div>
+      <div class="info-card-body">Subtract old from new, divide by old, multiply by 100.<br/><br/>Example: 50 → 75 = ((75−50) ÷ 50) × 100 = 50%</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">% difference vs % change</div>
+      <div class="info-card-body">% change has direction (increase or decrease). % difference is always positive and uses the average of both values as the base.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">How to find the original value</div>
+      <div class="info-card-body">Divide the final value by (1 + pct/100) for increases, or (1 − pct/100) for decreases.<br/><br/>Example: 120 after 20% increase → 120 ÷ 1.2 = 100</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  tools.bountywall.com &nbsp;·&nbsp; percentage calculator &nbsp;·&nbsp;
+  <a href="/" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">all tools</a>
+  &nbsp;·&nbsp;
+  <a href="https://bountywall.com/privacy.html" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">Privacy Policy</a>
+</footer>
+
+<script>
+  function fmt(n) {
+    if (isNaN(n) || !isFinite(n)) return '—';
+    // Round to 6 sig figs max, remove trailing zeros
+    let s = parseFloat(n.toPrecision(8)).toString();
+    return s;
+  }
+
+  function switchTab(i) {
+    document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
+    for (let m = 0; m < 6; m++) {
+      document.getElementById('mode'+m).style.display = m===i ? 'block' : 'none';
+    }
+  }
+
+  function setResult(id, val, formulaId, formula, colorClass) {
+    const el = document.getElementById(id);
+    el.textContent = val === '—' ? '—' : val;
+    el.className = 'calc-result-value' + (colorClass ? ' '+colorClass : '');
+    if (formulaId) document.getElementById(formulaId).textContent = formula || '';
+  }
+
+  function calc0() {
+    const pct = parseFloat(document.getElementById('m0_pct').value);
+    const num = parseFloat(document.getElementById('m0_num').value);
+    if (isNaN(pct) || isNaN(num)) { setResult('m0_result','—','m0_formula',''); return; }
+    const r = (pct / 100) * num;
+    setResult('m0_result', fmt(r), 'm0_formula', `Formula: (${pct} ÷ 100) × ${num} = ${fmt(r)}`);
+  }
+
+  function calc1() {
+    const x = parseFloat(document.getElementById('m1_x').value);
+    const y = parseFloat(document.getElementById('m1_y').value);
+    if (isNaN(x) || isNaN(y) || y === 0) { setResult('m1_result','—','m1_formula',''); return; }
+    const r = (x / y) * 100;
+    setResult('m1_result', fmt(r) + '%', 'm1_formula', `Formula: (${x} ÷ ${y}) × 100 = ${fmt(r)}%`);
+  }
+
+  function calc2() {
+    const from = parseFloat(document.getElementById('m2_from').value);
+    const to   = parseFloat(document.getElementById('m2_to').value);
+    if (isNaN(from) || isNaN(to) || from === 0) { setResult('m2_result','—','m2_formula',''); return; }
+    const r = ((to - from) / Math.abs(from)) * 100;
+    const sign = r >= 0 ? '+' : '';
+    const cls = r > 0 ? 'positive' : r < 0 ? 'negative' : '';
+    setResult('m2_result', sign + fmt(r) + '%', 'm2_formula',
+      `Formula: ((${to} − ${from}) ÷ |${from}|) × 100 = ${sign}${fmt(r)}%`, cls);
+  }
+
+  function calc3() {
+    const a = parseFloat(document.getElementById('m3_a').value);
+    const b = parseFloat(document.getElementById('m3_b').value);
+    if (isNaN(a) || isNaN(b) || (a + b) === 0) { setResult('m3_result','—','m3_formula',''); return; }
+    const r = (Math.abs(a - b) / ((a + b) / 2)) * 100;
+    setResult('m3_result', fmt(r) + '%', 'm3_formula',
+      `Formula: (|${a} − ${b}| ÷ ((${a} + ${b}) ÷ 2)) × 100 = ${fmt(r)}%`);
+  }
+
+  function calc4() {
+    const pct = parseFloat(document.getElementById('m4_pct').value);
+    const num = parseFloat(document.getElementById('m4_num').value);
+    if (isNaN(pct) || isNaN(num)) {
+      document.getElementById('m4_result_more').textContent = '—';
+      document.getElementById('m4_result_less').textContent = '—';
+      document.getElementById('m4_formula').textContent = '';
+      return;
+    }
+    const more = num + (pct / 100) * num;
+    const less = num - (pct / 100) * num;
+    document.getElementById('m4_result_more').textContent = fmt(more);
+    document.getElementById('m4_result_less').textContent = fmt(less);
+    document.getElementById('m4_formula').textContent =
+      `More: ${num} + (${pct}% × ${num}) = ${fmt(more)}   |   Less: ${num} − (${pct}% × ${num}) = ${fmt(less)}`;
+  }
+
+  function calc4b() {
+    // sync less inputs into main calc
+    const pct = document.getElementById('m4_pct2').value;
+    const num = document.getElementById('m4_num2').value;
+    document.getElementById('m4_pct').value = pct;
+    document.getElementById('m4_num').value = num;
+    calc4();
+  }
+
+  function calc5() {
+    const val = parseFloat(document.getElementById('m5_val').value);
+    const pct = parseFloat(document.getElementById('m5_pct').value);
+    if (isNaN(val) || isNaN(pct)) { document.getElementById('m5_result_inc').textContent = '—'; return; }
+    const r = val / (1 + pct / 100);
+    document.getElementById('m5_result_inc').textContent = fmt(r);
+    document.getElementById('m5_formula').textContent =
+      `${val} ÷ (1 + ${pct}/100) = ${val} ÷ ${fmt(1 + pct/100)} = ${fmt(r)}`;
+  }
+
+  function calc5b() {
+    const pct = parseFloat(document.getElementById('m5_pct2').value);
+    const val = parseFloat(document.getElementById('m5_val2').value);
+    if (isNaN(val) || isNaN(pct)) { document.getElementById('m5_result_dec').textContent = '—'; return; }
+    const r = val / (1 - pct / 100);
+    document.getElementById('m5_result_dec').textContent = fmt(r);
+  }
+
+  function copyResult(id, btn) {
+    const val = document.getElementById(id).textContent;
+    if (!val || val === '—') return;
+    navigator.clipboard.writeText(val).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = btn.textContent.includes('More') ? 'Copy More' : 'Copy'; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+</script>
+</body>
+</html>

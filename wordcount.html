@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Word Counter — Free Online Tool | BountyWall</title>
+  <meta name="description" content="Free online word counter. Count words, characters, sentences, paragraphs and reading time. Great for essays, SEO, Twitter, LinkedIn and more."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="icon" type="image/x-icon" href="https://bountywall.com/bounty.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --off-white:#f4f7fd; --blue-50:#eff5ff; --blue-100:#dbeafe; --blue-200:#bfdbfe;
+      --blue-300:#93c5fd; --blue-400:#60a5fa; --blue-500:#3b82f6; --blue-600:#2563eb;
+      --blue-700:#1d4ed8; --ink:#0d1b2e; --ink-mid:#3d5168; --ink-light:#8fa3bb;
+      --border:#d6e4f7; --border-dark:#b8d0ed; --success:#059669; --success-bg:#ecfdf5;
+      --sol-purple:#9945ff; --sol-green:#14f195;
+      --mono:'DM Mono',monospace; --serif:'Instrument Serif',serif; --sans:'DM Sans',sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--off-white);color:var(--ink);font-family:var(--sans);min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#c3d9f5 1px,transparent 1px);background-size:28px 28px;opacity:0.4;pointer-events:none;z-index:0;}
+    body::after{content:'';position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sol-purple),var(--sol-green),var(--blue-600));z-index:200;}
+    header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 44px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{display:flex;align-items:baseline;gap:1px;text-decoration:none;}
+    .logo-main{font-family:var(--serif);font-size:23px;color:var(--blue-700);}
+    .logo-dot{font-family:var(--mono);font-size:14px;color:var(--blue-400);}
+    .logo-tld{font-family:var(--mono);font-size:13px;color:var(--ink-light);}
+    .header-nav{display:flex;align-items:center;gap:16px;}
+    .header-nav a{font-family:var(--mono);font-size:11px;color:var(--ink-light);text-decoration:none;transition:color 0.12s;}
+    .header-nav a:hover{color:var(--blue-600);}
+    main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:52px 28px 100px;}
+    .hero{text-align:center;margin-bottom:36px;animation:fadeUp 0.3s ease both;}
+    .hero h1{font-family:var(--serif);font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-0.5px;color:var(--ink);margin-bottom:10px;}
+    .hero h1 em{font-style:italic;color:var(--blue-600);}
+    .hero-sub{font-family:var(--mono);font-size:11px;color:var(--ink-light);line-height:1.9;}
+
+    /* Stats grid */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:20px;animation:fadeUp 0.35s ease both;animation-delay:0.05s;}
+    .stat-card{background:white;border:1px solid var(--border);border-radius:11px;padding:16px 18px;text-align:center;box-shadow:0 2px 12px rgba(30,58,95,0.05);}
+    .stat-value{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--blue-700);line-height:1;}
+    .stat-label{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-top:6px;}
+
+    /* Textarea */
+    .editor-wrap{position:relative;animation:fadeUp 0.4s ease both;animation-delay:0.08s;}
+    .editor-toolbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:white;border:1px solid var(--border);border-bottom:none;border-radius:11px 11px 0 0;flex-wrap:wrap;}
+    .tb-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:var(--mono);font-size:10px;color:var(--ink-mid);cursor:pointer;transition:all 0.12s;}
+    .tb-btn:hover{border-color:var(--blue-400);color:var(--blue-600);}
+    .tb-sep{width:1px;height:18px;background:var(--border);margin:0 2px;}
+    .char-limit-wrap{margin-left:auto;display:flex;align-items:center;gap:6px;}
+    .char-limit-input{background:var(--blue-50);border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-family:var(--mono);font-size:11px;color:var(--ink);outline:none;width:80px;transition:border-color 0.15s;}
+    .char-limit-input:focus{border-color:var(--blue-400);}
+    .char-limit-label{font-family:var(--mono);font-size:10px;color:var(--ink-light);}
+    textarea{width:100%;height:320px;padding:18px;font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--ink);background:white;border:1px solid var(--border);border-top:none;border-radius:0 0 11px 11px;outline:none;resize:vertical;transition:border-color 0.15s;}
+    textarea:focus{border-color:var(--blue-400);}
+    textarea.over-limit{border-color:#dc2626;}
+
+    /* Limit bar */
+    .limit-bar-wrap{margin-top:8px;display:none;}
+    .limit-bar-wrap.show{display:block;}
+    .limit-bar-track{height:4px;background:var(--blue-100);border-radius:2px;overflow:hidden;}
+    .limit-bar-fill{height:100%;background:var(--blue-500);border-radius:2px;transition:width 0.2s,background 0.2s;width:0%;}
+    .limit-bar-fill.warn{background:#f59e0b;}
+    .limit-bar-fill.over{background:#dc2626;}
+    .limit-bar-label{font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:4px;}
+
+    /* Section label */
+    .section-label{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1.4px;margin:24px 0 14px;display:flex;align-items:center;gap:10px;}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* Limits grid */
+    .limits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px;}
+    .limit-card{background:white;border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+    .limit-card-name{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;}
+    .limit-card-bar{height:3px;background:var(--blue-100);border-radius:2px;overflow:hidden;margin-bottom:5px;}
+    .limit-card-fill{height:100%;border-radius:2px;transition:width 0.3s,background 0.3s;}
+    .limit-card-val{font-family:var(--mono);font-size:11px;color:var(--ink-mid);}
+    .limit-card-val span{color:var(--blue-600);font-weight:500;}
+
+    /* Keyword density */
+    .density-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;}
+    .density-table th{text-align:left;padding:8px 12px;background:var(--blue-50);color:var(--ink-light);font-weight:500;font-size:9.5px;text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid var(--border);}
+    .density-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink-mid);}
+    .density-table tr:last-child td{border-bottom:none;}
+    .density-bar{height:4px;background:var(--blue-100);border-radius:2px;overflow:hidden;margin-top:4px;}
+    .density-fill{height:100%;background:var(--blue-500);border-radius:2px;}
+
+    footer{position:relative;z-index:1;text-align:center;padding:28px;font-family:var(--mono);font-size:10px;color:var(--ink-light);border-top:1px solid var(--border);letter-spacing:0.4px;line-height:2.2;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    @media(max-width:580px){header{padding:0 18px;}main{padding:28px 14px 60px;}.stats-grid{grid-template-columns:repeat(3,1fr);}}
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://bountywall.com/index.html">
+    <span class="logo-main">BountyWall</span><span class="logo-dot">.</span><span class="logo-tld">com</span>
+  </a>
+  <div class="header-nav">
+    <a href="/">All Tools</a>
+    <a href="https://bountywall.com/earn.html">Earn SOL</a>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <h1>Word <em>Counter</em></h1>
+    <p class="hero-sub">words · characters · sentences · paragraphs · reading time · keyword density</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="sWords">0</div><div class="stat-label">Words</div></div>
+    <div class="stat-card"><div class="stat-value" id="sChars">0</div><div class="stat-label">Characters</div></div>
+    <div class="stat-card"><div class="stat-value" id="sCharsNoSpace">0</div><div class="stat-label">No Spaces</div></div>
+    <div class="stat-card"><div class="stat-value" id="sSentences">0</div><div class="stat-label">Sentences</div></div>
+    <div class="stat-card"><div class="stat-value" id="sParagraphs">0</div><div class="stat-label">Paragraphs</div></div>
+    <div class="stat-card"><div class="stat-value" id="sLines">0</div><div class="stat-label">Lines</div></div>
+    <div class="stat-card"><div class="stat-value" id="sReadTime">0m</div><div class="stat-label">Read Time</div></div>
+    <div class="stat-card"><div class="stat-value" id="sSpeakTime">0m</div><div class="stat-label">Speak Time</div></div>
+  </div>
+
+  <div class="editor-wrap">
+    <div class="editor-toolbar">
+      <button class="tb-btn" onclick="clearText()">Clear</button>
+      <button class="tb-btn" onclick="copyText()">Copy All</button>
+      <button class="tb-btn" onclick="pasteText()">Paste</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" onclick="removeExtraSpaces()">Remove extra spaces</button>
+      <button class="tb-btn" onclick="toUpperCase()">UPPER</button>
+      <button class="tb-btn" onclick="toLowerCase()">lower</button>
+      <button class="tb-btn" onclick="toTitleCase()">Title Case</button>
+      <div class="char-limit-wrap">
+        <span class="char-limit-label">Char limit:</span>
+        <input class="char-limit-input" id="charLimit" type="number" placeholder="e.g. 280" min="1" oninput="updateAll()"/>
+      </div>
+    </div>
+    <textarea id="mainText" placeholder="Start typing or paste your text here…" oninput="updateAll()"></textarea>
+    <div class="limit-bar-wrap" id="limitBarWrap">
+      <div class="limit-bar-track"><div class="limit-bar-fill" id="limitBarFill"></div></div>
+      <div class="limit-bar-label" id="limitBarLabel"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Platform Limits</div>
+  <div class="limits-grid" id="limitsGrid"></div>
+
+  <div class="section-label">Keyword Density</div>
+  <div id="densityWrap" style="background:white;border:1px solid var(--border);border-radius:11px;overflow:hidden;">
+    <table class="density-table">
+      <thead><tr><th>Keyword</th><th>Count</th><th>Density</th></tr></thead>
+      <tbody id="densityBody"><tr><td colspan="3" style="color:var(--ink-light);text-align:center;padding:20px;">Start typing to see keyword density</td></tr></tbody>
+    </table>
+  </div>
+
+</main>
+<footer>
+  tools.bountywall.com &nbsp;·&nbsp; word counter &nbsp;·&nbsp;
+  <a href="/" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">all tools</a>
+  &nbsp;·&nbsp;
+  <a href="https://bountywall.com/privacy.html" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">Privacy Policy</a>
+</footer>
+<script>
+const PLATFORMS = [
+  { name:'Twitter / X',   limit:280 },
+  { name:'Instagram Bio', limit:150 },
+  { name:'LinkedIn Post', limit:3000 },
+  { name:'Meta Desc',     limit:160 },
+  { name:'SMS',           limit:160 },
+  { name:'YouTube Title', limit:100 },
+  { name:'TikTok Bio',    limit:80 },
+  { name:'Reddit Title',  limit:300 },
+];
+
+const STOP_WORDS = new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','by','from','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','shall','can','i','you','he','she','it','we','they','them','their','this','that','these','those','as','if','so','not','no','up','out','about','than','then','its','into','also','just','more','some','what','which','who','how','all','my','your','our','his','her']);
+
+function updateAll() {
+  const text = document.getElementById('mainText').value;
+  const words = text.trim() === '' ? [] : text.trim().split(/\s+/).filter(w => w.length > 0);
+  const chars = text.length;
+  const charsNoSpace = text.replace(/\s/g,'').length;
+  const sentences = text.trim() === '' ? 0 : (text.match(/[.!?]+/g)||[]).length;
+  const paragraphs = text.trim() === '' ? 0 : text.split(/\n\s*\n/).filter(p=>p.trim().length>0).length || (text.trim().length>0?1:0);
+  const lines = text === '' ? 0 : text.split('\n').length;
+  const readTime = Math.ceil(words.length / 238);
+  const speakTime = Math.ceil(words.length / 130);
+
+  document.getElementById('sWords').textContent = words.length.toLocaleString();
+  document.getElementById('sChars').textContent = chars.toLocaleString();
+  document.getElementById('sCharsNoSpace').textContent = charsNoSpace.toLocaleString();
+  document.getElementById('sSentences').textContent = sentences.toLocaleString();
+  document.getElementById('sParagraphs').textContent = paragraphs.toLocaleString();
+  document.getElementById('sLines').textContent = lines.toLocaleString();
+  document.getElementById('sReadTime').textContent = readTime < 60 ? readTime+'m' : Math.floor(readTime/60)+'h '+readTime%60+'m';
+  document.getElementById('sSpeakTime').textContent = speakTime < 60 ? speakTime+'m' : Math.floor(speakTime/60)+'h '+speakTime%60+'m';
+
+  // Custom char limit
+  const limitVal = parseInt(document.getElementById('charLimit').value);
+  const limitWrap = document.getElementById('limitBarWrap');
+  const ta = document.getElementById('mainText');
+  if (limitVal > 0) {
+    limitWrap.classList.add('show');
+    const pct = Math.min((chars / limitVal) * 100, 100);
+    const fill = document.getElementById('limitBarFill');
+    fill.style.width = pct + '%';
+    fill.className = 'limit-bar-fill' + (pct >= 100 ? ' over' : pct >= 80 ? ' warn' : '');
+    document.getElementById('limitBarLabel').textContent = `${chars} / ${limitVal} characters${chars > limitVal ? ' — '+( chars-limitVal)+' over limit' : ' remaining: '+(limitVal-chars)}`;
+    ta.classList.toggle('over-limit', chars > limitVal);
+  } else {
+    limitWrap.classList.remove('show');
+    ta.classList.remove('over-limit');
+  }
+
+  // Platform limits
+  buildLimits(chars);
+
+  // Keyword density
+  buildDensity(words);
+}
+
+function buildLimits(chars) {
+  const grid = document.getElementById('limitsGrid');
+  grid.innerHTML = '';
+  PLATFORMS.forEach(p => {
+    const pct = Math.min((chars / p.limit) * 100, 100);
+    const over = chars > p.limit;
+    const card = document.createElement('div');
+    card.className = 'limit-card';
+    card.innerHTML = `
+      <div class="limit-card-name">${p.name}</div>
+      <div class="limit-card-bar"><div class="limit-card-fill" style="width:${pct}%;background:${over?'#dc2626':pct>80?'#f59e0b':'var(--blue-500)'}"></div></div>
+      <div class="limit-card-val">${chars} / <span>${p.limit}</span>${over?' <span style="color:#dc2626">✗ +'+(chars-p.limit)+'</span>':' <span style="color:var(--success)">✓</span>'}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function buildDensity(words) {
+  const tbody = document.getElementById('densityBody');
+  if (!words.length) {
+    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--ink-light);text-align:center;padding:20px;">Start typing to see keyword density</td></tr>';
+    return;
+  }
+  const freq = {};
+  words.forEach(w => {
+    const clean = w.toLowerCase().replace(/[^a-z0-9']/g,'');
+    if (clean.length > 2 && !STOP_WORDS.has(clean)) freq[clean] = (freq[clean]||0)+1;
+  });
+  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  const max = sorted[0]?.[1] || 1;
+  tbody.innerHTML = sorted.map(([word,count]) => {
+    const density = ((count/words.length)*100).toFixed(1);
+    const barW = Math.round((count/max)*100);
+    return `<tr>
+      <td>${word}</td>
+      <td>${count}</td>
+      <td>${density}%<div class="density-bar"><div class="density-fill" style="width:${barW}%"></div></div></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="3" style="color:var(--ink-light);text-align:center;padding:20px;">No significant keywords found</td></tr>';
+}
+
+function clearText() { document.getElementById('mainText').value=''; updateAll(); }
+function copyText() { navigator.clipboard.writeText(document.getElementById('mainText').value); }
+async function pasteText() { try { const t=await navigator.clipboard.readText(); document.getElementById('mainText').value+=t; updateAll(); } catch(e){} }
+function removeExtraSpaces() { document.getElementById('mainText').value=document.getElementById('mainText').value.replace(/\s+/g,' ').trim(); updateAll(); }
+function toUpperCase() { document.getElementById('mainText').value=document.getElementById('mainText').value.toUpperCase(); updateAll(); }
+function toLowerCase() { document.getElementById('mainText').value=document.getElementById('mainText').value.toLowerCase(); updateAll(); }
+function toTitleCase() { document.getElementById('mainText').value=document.getElementById('mainText').value.replace(/\w\S*/g,t=>t.charAt(0).toUpperCase()+t.substr(1).toLowerCase()); updateAll(); }
+
+updateAll();
+</script>
+</body>
+</html>

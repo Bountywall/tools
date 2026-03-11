@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Base64 Encoder & Decoder — Free Online Tool | BountyWall</title>
+  <meta name="description" content="Free online Base64 encoder and decoder. Encode or decode text, URLs and files instantly. No upload, no signup — runs entirely in your browser."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="icon" type="image/x-icon" href="https://bountywall.com/bounty.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--off-white:#f4f7fd;--blue-50:#eff5ff;--blue-100:#dbeafe;--blue-200:#bfdbfe;--blue-400:#60a5fa;--blue-500:#3b82f6;--blue-600:#2563eb;--blue-700:#1d4ed8;--ink:#0d1b2e;--ink-mid:#3d5168;--ink-light:#8fa3bb;--border:#d6e4f7;--border-dark:#b8d0ed;--success:#059669;--success-bg:#ecfdf5;--sol-purple:#9945ff;--sol-green:#14f195;--mono:'DM Mono',monospace;--serif:'Instrument Serif',serif;--sans:'DM Sans',sans-serif;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--off-white);color:var(--ink);font-family:var(--sans);min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#c3d9f5 1px,transparent 1px);background-size:28px 28px;opacity:0.4;pointer-events:none;z-index:0;}
+    body::after{content:'';position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sol-purple),var(--sol-green),var(--blue-600));z-index:200;}
+    header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 44px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{display:flex;align-items:baseline;gap:1px;text-decoration:none;}
+    .logo-main{font-family:var(--serif);font-size:23px;color:var(--blue-700);}
+    .logo-dot{font-family:var(--mono);font-size:14px;color:var(--blue-400);}
+    .logo-tld{font-family:var(--mono);font-size:13px;color:var(--ink-light);}
+    .header-nav a{font-family:var(--mono);font-size:11px;color:var(--ink-light);text-decoration:none;margin-left:16px;transition:color 0.12s;}
+    .header-nav a:hover{color:var(--blue-600);}
+    main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:52px 28px 100px;}
+    .hero{text-align:center;margin-bottom:36px;animation:fadeUp 0.3s ease both;}
+    .hero h1{font-family:var(--serif);font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-0.5px;margin-bottom:10px;}
+    .hero h1 em{font-style:italic;color:var(--blue-600);}
+    .hero-sub{font-family:var(--mono);font-size:11px;color:var(--ink-light);}
+
+    /* Mode tabs */
+    .mode-tabs{display:flex;gap:8px;margin-bottom:20px;animation:fadeUp 0.35s ease both;animation-delay:0.05s;}
+    .mode-tab{flex:1;padding:11px;border-radius:9px;border:1.5px solid var(--border);background:white;font-family:var(--mono);font-size:12px;color:var(--ink-mid);cursor:pointer;transition:all 0.15s;text-align:center;}
+    .mode-tab:hover{border-color:var(--blue-400);color:var(--blue-600);}
+    .mode-tab.active{background:var(--blue-600);border-color:var(--blue-600);color:white;}
+
+    /* Panels */
+    .panel{background:white;border:1px solid var(--border);border-radius:13px;padding:24px;margin-bottom:16px;animation:fadeUp 0.4s ease both;animation-delay:0.08s;}
+    .panel-title{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;}
+    textarea{width:100%;padding:14px;font-family:var(--mono);font-size:13px;line-height:1.6;color:var(--ink);background:var(--blue-50);border:1.5px solid var(--border);border-radius:8px;outline:none;resize:vertical;min-height:140px;transition:border-color 0.15s;}
+    textarea:focus{border-color:var(--blue-400);background:white;}
+    textarea.error{border-color:#dc2626;background:#fef2f2;}
+
+    /* Action bar */
+    .action-bar{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0;}
+    .action-btn{padding:10px 28px;border-radius:8px;border:none;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all 0.15s;}
+    .action-btn-primary{background:var(--blue-600);color:white;}
+    .action-btn-primary:hover{background:var(--blue-700);}
+    .action-btn-secondary{background:white;border:1.5px solid var(--border);color:var(--ink-mid);}
+    .action-btn-secondary:hover{border-color:var(--blue-400);color:var(--blue-600);}
+    .swap-btn{background:var(--blue-50);border:1.5px solid var(--blue-200);border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:18px;color:var(--blue-600);cursor:pointer;transition:all 0.15s;}
+    .swap-btn:hover{background:var(--blue-600);color:white;}
+
+    /* Output row */
+    .output-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+    .copy-btn{background:none;border:1px solid var(--border-dark);border-radius:5px;padding:5px 12px;font-family:var(--mono);font-size:10px;color:var(--ink-light);cursor:pointer;transition:all 0.12s;}
+    .copy-btn:hover{border-color:var(--blue-400);color:var(--blue-600);}
+    .copy-btn.copied{border-color:var(--success);color:var(--success);}
+    .error-msg{font-family:var(--mono);font-size:11px;color:#dc2626;margin-top:6px;display:none;}
+    .error-msg.show{display:block;}
+
+    /* Stats row */
+    .stats-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;}
+    .stat-chip{font-family:var(--mono);font-size:10px;color:var(--ink-light);background:var(--blue-50);border:1px solid var(--border);border-radius:20px;padding:3px 10px;}
+    .stat-chip span{color:var(--blue-600);}
+
+    /* File section */
+    .file-drop{border:2px dashed var(--border-dark);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--blue-50);}
+    .file-drop:hover,.file-drop.drag{border-color:var(--blue-400);background:var(--blue-100);}
+    .file-drop-icon{font-size:32px;margin-bottom:8px;}
+    .file-drop-text{font-family:var(--mono);font-size:12px;color:var(--ink-mid);}
+    .file-drop-sub{font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:4px;}
+    #fileInput{display:none;}
+
+    /* URL safe toggle */
+    .toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+    .toggle-label{font-family:var(--mono);font-size:11px;color:var(--ink-mid);}
+    .toggle{position:relative;width:36px;height:20px;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;inset:0;background:var(--border-dark);border-radius:20px;cursor:pointer;transition:background 0.2s;}
+    .toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:white;border-radius:50%;transition:transform 0.2s;}
+    .toggle input:checked+.toggle-slider{background:var(--blue-600);}
+    .toggle input:checked+.toggle-slider::before{transform:translateX(16px);}
+
+    /* Section label */
+    .section-label{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1.4px;margin:24px 0 14px;display:flex;align-items:center;gap:10px;}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    footer{position:relative;z-index:1;text-align:center;padding:28px;font-family:var(--mono);font-size:10px;color:var(--ink-light);border-top:1px solid var(--border);letter-spacing:0.4px;line-height:2.2;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    @media(max-width:580px){header{padding:0 18px;}main{padding:28px 14px 60px;}}
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://bountywall.com/index.html">
+    <span class="logo-main">BountyWall</span><span class="logo-dot">.</span><span class="logo-tld">com</span>
+  </a>
+  <div class="header-nav">
+    <a href="/">All Tools</a>
+    <a href="https://bountywall.com/earn.html">Earn SOL</a>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <h1>Base64 <em>Encoder</em> & Decoder</h1>
+    <p class="hero-sub">text · URL · file · live · URL-safe mode</p>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('text')">📝 Text</button>
+    <button class="mode-tab" onclick="setMode('url')">🔗 URL Encode / Decode</button>
+    <button class="mode-tab" onclick="setMode('file')">📁 File → Base64</button>
+  </div>
+
+  <!-- TEXT MODE -->
+  <div id="modeText">
+    <div class="toggle-row">
+      <label class="toggle"><input type="checkbox" id="urlSafeToggle" onchange="autoConvert()"/><span class="toggle-slider"></span></label>
+      <span class="toggle-label">URL-safe mode (replace <code>+/</code> with <code>-_</code>, strip <code>=</code>)</span>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Input</div>
+      <textarea id="textInput" placeholder="Type or paste your text here…" oninput="autoConvert()"></textarea>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn action-btn-primary" onclick="doEncode()">Encode →</button>
+      <button class="swap-btn" onclick="swapPanels()" title="Swap">⇄</button>
+      <button class="action-btn action-btn-primary" onclick="doDecode()">← Decode</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Output</div>
+      <div class="output-toolbar">
+        <button class="copy-btn" id="textCopyBtn" onclick="copyOutput('textOutput','textCopyBtn')">Copy</button>
+        <button class="action-btn action-btn-secondary" style="padding:5px 12px;font-size:10px;" onclick="clearAll()">Clear</button>
+      </div>
+      <textarea id="textOutput" placeholder="Result appears here…" oninput="autoConvertReverse()"></textarea>
+      <div class="error-msg" id="textError">Invalid Base64 — could not decode</div>
+      <div class="stats-row" id="textStats"></div>
+    </div>
+  </div>
+
+  <!-- URL MODE -->
+  <div id="modeUrl" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Input URL or text</div>
+      <textarea id="urlInput" placeholder="https://example.com/path?foo=bar&baz=qux" oninput="urlAutoConvert()"></textarea>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn action-btn-primary" onclick="urlEncode()">URL Encode →</button>
+      <button class="action-btn action-btn-primary" onclick="urlDecode()">← URL Decode</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Output</div>
+      <div class="output-toolbar">
+        <button class="copy-btn" id="urlCopyBtn" onclick="copyOutput('urlOutput','urlCopyBtn')">Copy</button>
+        <button class="action-btn action-btn-secondary" style="padding:5px 12px;font-size:10px;" onclick="document.getElementById('urlInput').value='';document.getElementById('urlOutput').value='';">Clear</button>
+      </div>
+      <textarea id="urlOutput" placeholder="Encoded / decoded URL appears here…" readonly></textarea>
+    </div>
+  </div>
+
+  <!-- FILE MODE -->
+  <div id="modeFile" style="display:none;">
+    <div class="panel">
+      <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onFileDrop(event)">
+        <div class="file-drop-icon">📁</div>
+        <div class="file-drop-text">Click to select a file, or drag & drop</div>
+        <div class="file-drop-sub">Any file type · max 5 MB · never leaves your browser</div>
+      </div>
+      <input type="file" id="fileInput" onchange="onFileSelect(event)"/>
+      <div id="fileInfo" style="display:none;margin-top:14px;">
+        <div class="stats-row" id="fileStats"></div>
+      </div>
+    </div>
+    <div class="panel" id="fileOutputPanel" style="display:none;">
+      <div class="panel-title">Base64 Output</div>
+      <div class="output-toolbar">
+        <button class="copy-btn" id="fileCopyBtn" onclick="copyOutput('fileOutput','fileCopyBtn')">Copy</button>
+        <button class="copy-btn" id="fileDataUrlBtn" onclick="copyDataUrl()">Copy as Data URL</button>
+        <button class="copy-btn" id="fileDownloadBtn" onclick="downloadBase64()">Download .txt</button>
+      </div>
+      <textarea id="fileOutput" readonly style="min-height:160px;font-size:11px;word-break:break-all;"></textarea>
+    </div>
+  </div>
+
+  <!-- Reference -->
+  <div class="section-label">Base64 Quick Reference</div>
+  <div style="background:white;border:1px solid var(--border);border-radius:11px;padding:20px 24px;font-family:var(--mono);font-size:11px;color:var(--ink-mid);line-height:2;">
+    Base64 encodes binary data as ASCII text using 64 characters: <code>A–Z a–z 0–9 + /</code><br/>
+    Every 3 bytes of input → 4 Base64 characters. Output is ~33% larger than input.<br/>
+    URL-safe Base64 replaces <code>+</code> with <code>-</code>, <code>/</code> with <code>_</code>, and strips padding <code>=</code>.<br/>
+    Common uses: embedding images in HTML/CSS, JWT tokens, email attachments (MIME), API payloads.
+  </div>
+</main>
+<footer>
+  tools.bountywall.com &nbsp;·&nbsp; base64 encoder &nbsp;·&nbsp;
+  <a href="/" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">all tools</a>
+  &nbsp;·&nbsp;
+  <a href="https://bountywall.com/privacy.html" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">Privacy Policy</a>
+</footer>
+<script>
+let currentMode = 'text';
+let lastFileResult = null;
+let lastFileType = '';
+let lastFileName = '';
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach((t,i) => t.classList.toggle('active', ['text','url','file'][i]===mode));
+  document.getElementById('modeText').style.display = mode==='text' ? '' : 'none';
+  document.getElementById('modeUrl').style.display  = mode==='url'  ? '' : 'none';
+  document.getElementById('modeFile').style.display = mode==='file' ? '' : 'none';
+}
+
+// ── TEXT ──
+function toUrlSafe(b64) {
+  return b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+function fromUrlSafe(b64) {
+  b64 = b64.replace(/-/g,'+').replace(/_/g,'/');
+  while(b64.length%4) b64+='=';
+  return b64;
+}
+
+function doEncode() {
+  const input = document.getElementById('textInput').value;
+  let result = btoa(unescape(encodeURIComponent(input)));
+  if(document.getElementById('urlSafeToggle').checked) result = toUrlSafe(result);
+  document.getElementById('textOutput').value = result;
+  document.getElementById('textError').classList.remove('show');
+  document.getElementById('textOutput').classList.remove('error');
+  showTextStats(input, result);
+}
+
+function doDecode() {
+  const input = document.getElementById('textOutput').value.trim();
+  try {
+    const safe = document.getElementById('urlSafeToggle').checked ? fromUrlSafe(input) : input;
+    const result = decodeURIComponent(escape(atob(safe)));
+    document.getElementById('textInput').value = result;
+    document.getElementById('textError').classList.remove('show');
+    document.getElementById('textOutput').classList.remove('error');
+    showTextStats(result, input);
+  } catch(e) {
+    document.getElementById('textError').classList.add('show');
+    document.getElementById('textOutput').classList.add('error');
+  }
+}
+
+function autoConvert() {
+  const v = document.getElementById('textInput').value;
+  if(!v) { document.getElementById('textOutput').value=''; clearStats(); return; }
+  doEncode();
+}
+
+function autoConvertReverse() {
+  const v = document.getElementById('textOutput').value;
+  if(!v) return;
+  try {
+    const safe = document.getElementById('urlSafeToggle').checked ? fromUrlSafe(v) : v;
+    const result = decodeURIComponent(escape(atob(safe)));
+    document.getElementById('textInput').value = result;
+    document.getElementById('textError').classList.remove('show');
+    document.getElementById('textOutput').classList.remove('error');
+  } catch(e) {}
+}
+
+function swapPanels() {
+  const a = document.getElementById('textInput').value;
+  const b = document.getElementById('textOutput').value;
+  document.getElementById('textInput').value = b;
+  document.getElementById('textOutput').value = a;
+}
+
+function clearAll() {
+  document.getElementById('textInput').value='';
+  document.getElementById('textOutput').value='';
+  document.getElementById('textError').classList.remove('show');
+  clearStats();
+}
+
+function showTextStats(plain, encoded) {
+  const ratio = plain.length ? ((encoded.length/plain.length)*100).toFixed(0)+'%' : '—';
+  document.getElementById('textStats').innerHTML = `
+    <span class="stat-chip">Input: <span>${plain.length} chars</span></span>
+    <span class="stat-chip">Output: <span>${encoded.length} chars</span></span>
+    <span class="stat-chip">Size ratio: <span>${ratio}</span></span>`;
+}
+function clearStats() { document.getElementById('textStats').innerHTML=''; }
+
+// ── URL ──
+function urlEncode() {
+  const v = document.getElementById('urlInput').value;
+  document.getElementById('urlOutput').value = encodeURIComponent(v);
+}
+function urlDecode() {
+  try {
+    document.getElementById('urlOutput').value = decodeURIComponent(document.getElementById('urlInput').value);
+  } catch(e) {
+    document.getElementById('urlOutput').value = 'Invalid URL encoding';
+  }
+}
+function urlAutoConvert() {
+  const v = document.getElementById('urlInput').value;
+  if(v.includes('%')) urlDecode(); else urlEncode();
+}
+
+// ── FILE ──
+function onDragOver(e) { e.preventDefault(); document.getElementById('fileDrop').classList.add('drag'); }
+function onDragLeave()  { document.getElementById('fileDrop').classList.remove('drag'); }
+function onFileDrop(e)  { e.preventDefault(); onDragLeave(); processFile(e.dataTransfer.files[0]); }
+function onFileSelect(e){ processFile(e.target.files[0]); }
+
+function processFile(file) {
+  if(!file) return;
+  if(file.size > 5*1024*1024) { alert('File too large — max 5 MB'); return; }
+  lastFileName = file.name;
+  lastFileType = file.type || 'application/octet-stream';
+  const reader = new FileReader();
+  reader.onload = e => {
+    const base64 = e.target.result.split(',')[1];
+    lastFileResult = base64;
+    document.getElementById('fileOutput').value = base64;
+    document.getElementById('fileOutputPanel').style.display = '';
+    document.getElementById('fileInfo').style.display = '';
+    const kb = (file.size/1024).toFixed(1);
+    const b64kb = (base64.length/1024).toFixed(1);
+    document.getElementById('fileStats').innerHTML = `
+      <span class="stat-chip">Name: <span>${file.name}</span></span>
+      <span class="stat-chip">Type: <span>${file.type||'unknown'}</span></span>
+      <span class="stat-chip">Size: <span>${kb} KB</span></span>
+      <span class="stat-chip">Base64 size: <span>${b64kb} KB</span></span>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function copyDataUrl() {
+  if(!lastFileResult) return;
+  const dataUrl = `data:${lastFileType};base64,${lastFileResult}`;
+  navigator.clipboard.writeText(dataUrl);
+  const btn = document.getElementById('fileDataUrlBtn');
+  btn.textContent = '✓ Copied';
+  setTimeout(()=>btn.textContent='Copy as Data URL',1800);
+}
+
+function downloadBase64() {
+  if(!lastFileResult) return;
+  const blob = new Blob([lastFileResult], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = lastFileName.replace(/\.[^.]+$/,'')+'.b64.txt';
+  a.click();
+}
+
+// ── COPY ──
+function copyOutput(id, btnId) {
+  const text = document.getElementById(id).value;
+  if(!text) return;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById(btnId);
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); },1800);
+  });
+}
+</script>
+</body>
+</html>

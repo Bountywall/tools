@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timestamp Converter — Free Online Tool | BountyWall</title>
+  <meta name="description" content="Free online Unix timestamp converter. Convert between Unix timestamps, human-readable dates, ISO 8601, UTC and local time. Live clock included."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="icon" type="image/x-icon" href="https://bountywall.com/bounty.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--off-white:#f4f7fd;--blue-50:#eff5ff;--blue-100:#dbeafe;--blue-200:#bfdbfe;--blue-400:#60a5fa;--blue-500:#3b82f6;--blue-600:#2563eb;--blue-700:#1d4ed8;--ink:#0d1b2e;--ink-mid:#3d5168;--ink-light:#8fa3bb;--border:#d6e4f7;--border-dark:#b8d0ed;--success:#059669;--success-bg:#ecfdf5;--sol-purple:#9945ff;--sol-green:#14f195;--mono:'DM Mono',monospace;--serif:'Instrument Serif',serif;--sans:'DM Sans',sans-serif;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--off-white);color:var(--ink);font-family:var(--sans);min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#c3d9f5 1px,transparent 1px);background-size:28px 28px;opacity:0.4;pointer-events:none;z-index:0;}
+    body::after{content:'';position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sol-purple),var(--sol-green),var(--blue-600));z-index:200;}
+    header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 44px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{display:flex;align-items:baseline;gap:1px;text-decoration:none;}
+    .logo-main{font-family:var(--serif);font-size:23px;color:var(--blue-700);}
+    .logo-dot{font-family:var(--mono);font-size:14px;color:var(--blue-400);}
+    .logo-tld{font-family:var(--mono);font-size:13px;color:var(--ink-light);}
+    .header-nav a{font-family:var(--mono);font-size:11px;color:var(--ink-light);text-decoration:none;margin-left:16px;transition:color 0.12s;}
+    .header-nav a:hover{color:var(--blue-600);}
+    main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:52px 28px 100px;}
+    .hero{text-align:center;margin-bottom:36px;animation:fadeUp 0.3s ease both;}
+    .hero h1{font-family:var(--serif);font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-0.5px;margin-bottom:10px;}
+    .hero h1 em{font-style:italic;color:var(--blue-600);}
+    .hero-sub{font-family:var(--mono);font-size:11px;color:var(--ink-light);}
+
+    /* Live clock */
+    .live-clock{background:var(--ink);border-radius:13px;padding:24px 28px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;animation:fadeUp 0.35s ease both;animation-delay:0.05s;}
+    .clock-main{font-family:var(--mono);font-size:32px;color:var(--sol-green);letter-spacing:2px;}
+    .clock-ts{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;}
+    .clock-right{text-align:right;}
+    .clock-utc{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,0.7);}
+    .clock-iso{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;}
+    .now-btn{background:var(--sol-green);color:var(--ink);border:none;border-radius:7px;padding:8px 16px;font-family:var(--mono);font-size:11px;cursor:pointer;font-weight:600;transition:opacity 0.15s;}
+    .now-btn:hover{opacity:0.85;}
+
+    /* Cards */
+    .card{background:white;border:1px solid var(--border);border-radius:13px;padding:24px;margin-bottom:16px;animation:fadeUp 0.4s ease both;animation-delay:0.08s;}
+    .card-title{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;}
+
+    /* Inputs */
+    .input-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px;}
+    .input-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px;}
+    .input-label{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.8px;}
+    .ts-input{background:var(--blue-50);border:1.5px solid var(--border);border-radius:8px;padding:11px 14px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none;width:100%;transition:border-color 0.15s;}
+    .ts-input:focus{border-color:var(--blue-400);background:white;}
+    .ts-input.error{border-color:#dc2626;background:#fef2f2;}
+    select.ts-input{cursor:pointer;}
+    .conv-btn{background:var(--blue-600);color:white;border:none;border-radius:8px;padding:11px 20px;font-family:var(--mono);font-size:12px;cursor:pointer;white-space:nowrap;transition:background 0.15s;flex-shrink:0;}
+    .conv-btn:hover{background:var(--blue-700);}
+
+    /* Results grid */
+    .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+    .result-row{background:var(--blue-50);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .result-label{font-family:var(--mono);font-size:9px;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;}
+    .result-value{font-family:var(--mono);font-size:12px;color:var(--ink);word-break:break-all;}
+    .copy-btn{background:none;border:1px solid var(--border-dark);border-radius:5px;padding:4px 10px;font-family:var(--mono);font-size:9.5px;color:var(--ink-light);cursor:pointer;transition:all 0.12s;white-space:nowrap;flex-shrink:0;}
+    .copy-btn:hover{border-color:var(--blue-400);color:var(--blue-600);}
+    .copy-btn.copied{border-color:var(--success);color:var(--success);}
+
+    /* Relative time */
+    .relative-badge{display:inline-block;background:var(--blue-100);border:1px solid var(--blue-200);border-radius:20px;padding:4px 14px;font-family:var(--mono);font-size:12px;color:var(--blue-700);margin-top:10px;}
+
+    /* Section label */
+    .section-label{font-family:var(--mono);font-size:9.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1.4px;margin:24px 0 14px;display:flex;align-items:center;gap:10px;}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* Ref table */
+    .ref-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;}
+    .ref-table th{text-align:left;padding:8px 12px;background:var(--blue-50);color:var(--ink-light);font-size:9.5px;text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid var(--border);}
+    .ref-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink-mid);}
+    .ref-table tr:last-child td{border-bottom:none;}
+    .ref-table tr:hover td{background:var(--blue-50);}
+
+    /* Date diff */
+    .diff-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:flex-end;}
+    .diff-result{background:var(--blue-50);border:1px solid var(--blue-200);border-radius:10px;padding:16px 20px;margin-top:12px;font-family:var(--mono);}
+    .diff-main{font-size:22px;font-weight:500;color:var(--blue-700);}
+    .diff-sub{font-size:11px;color:var(--ink-light);margin-top:4px;line-height:1.8;}
+    .diff-sep{font-family:var(--mono);font-size:18px;color:var(--ink-light);padding-bottom:8px;text-align:center;}
+
+    footer{position:relative;z-index:1;text-align:center;padding:28px;font-family:var(--mono);font-size:10px;color:var(--ink-light);border-top:1px solid var(--border);letter-spacing:0.4px;line-height:2.2;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    @media(max-width:600px){
+      header{padding:0 18px;}main{padding:28px 14px 60px;}
+      .results-grid{grid-template-columns:1fr;}
+      .diff-grid{grid-template-columns:1fr;gap:8px;}
+      .diff-sep{display:none;}
+      .live-clock{flex-direction:column;gap:10px;}
+      .clock-right{text-align:left;}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://bountywall.com/index.html">
+    <span class="logo-main">BountyWall</span><span class="logo-dot">.</span><span class="logo-tld">com</span>
+  </a>
+  <div class="header-nav">
+    <a href="/">All Tools</a>
+    <a href="https://bountywall.com/earn.html">Earn SOL</a>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <h1>Timestamp <em>Converter</em></h1>
+    <p class="hero-sub">Unix · ISO 8601 · UTC · local time · relative time · date diff</p>
+  </div>
+
+  <!-- Live clock -->
+  <div class="live-clock">
+    <div>
+      <div class="clock-main" id="clockTime">--:--:--</div>
+      <div class="clock-ts">Unix: <span id="clockTs">--</span></div>
+    </div>
+    <div class="clock-right">
+      <div class="clock-utc" id="clockUtc">--</div>
+      <div class="clock-iso" id="clockIso">--</div>
+    </div>
+    <button class="now-btn" onclick="useNow()">Use Now ↓</button>
+  </div>
+
+  <!-- Unix → Human -->
+  <div class="card">
+    <div class="card-title">Unix Timestamp → Human Date</div>
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">Unix Timestamp</span>
+        <input class="ts-input" id="unixInput" type="number" placeholder="e.g. 1741651200" oninput="unixToHuman()"/>
+      </div>
+      <div class="input-group" style="max-width:130px;">
+        <span class="input-label">Unit</span>
+        <select class="ts-input" id="unixUnit" onchange="unixToHuman()">
+          <option value="s">Seconds (s)</option>
+          <option value="ms">Milliseconds (ms)</option>
+        </select>
+      </div>
+      <button class="conv-btn" onclick="unixToHuman()">Convert</button>
+    </div>
+    <div class="results-grid" id="unixResults"></div>
+    <div id="unixRelative"></div>
+  </div>
+
+  <!-- Human → Unix -->
+  <div class="card">
+    <div class="card-title">Human Date → Unix Timestamp</div>
+    <div class="input-row">
+      <div class="input-group">
+        <span class="input-label">Date & Time</span>
+        <input class="ts-input" id="dateInput" type="datetime-local" oninput="humanToUnix()"/>
+      </div>
+      <div class="input-group" style="max-width:150px;">
+        <span class="input-label">Timezone</span>
+        <select class="ts-input" id="tzSelect" onchange="humanToUnix()">
+          <option value="local">Local Time</option>
+          <option value="UTC">UTC</option>
+        </select>
+      </div>
+      <button class="conv-btn" onclick="humanToUnix()">Convert</button>
+    </div>
+    <div class="results-grid" id="humanResults"></div>
+  </div>
+
+  <!-- Date difference -->
+  <div class="card">
+    <div class="card-title">Date Difference Calculator</div>
+    <div class="diff-grid">
+      <div class="input-group">
+        <span class="input-label">Start Date</span>
+        <input class="ts-input" id="diffStart" type="datetime-local" oninput="calcDiff()"/>
+      </div>
+      <div class="diff-sep">→</div>
+      <div class="input-group">
+        <span class="input-label">End Date</span>
+        <input class="ts-input" id="diffEnd" type="datetime-local" oninput="calcDiff()"/>
+      </div>
+    </div>
+    <div class="diff-result" id="diffResult" style="display:none;"></div>
+  </div>
+
+  <!-- Reference -->
+  <div class="section-label">Common Timestamps</div>
+  <div style="background:white;border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:24px;">
+    <table class="ref-table">
+      <thead><tr><th>Event</th><th>Unix (s)</th><th>Date</th></tr></thead>
+      <tbody id="refBody"></tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Unix Time Reference</div>
+  <div style="background:white;border:1px solid var(--border);border-radius:11px;padding:20px 24px;font-family:var(--mono);font-size:11px;color:var(--ink-mid);line-height:2.1;">
+    Unix time = seconds since <strong>1 Jan 1970 00:00:00 UTC</strong> (the Unix epoch).<br/>
+    Milliseconds = Unix × 1000. JavaScript's <code>Date.now()</code> returns milliseconds.<br/>
+    The Year 2038 problem: 32-bit signed integers overflow at <strong>2,147,483,647</strong> (19 Jan 2038 03:14:07 UTC).<br/>
+    ISO 8601 format: <code>YYYY-MM-DDTHH:mm:ssZ</code> — the Z means UTC.
+  </div>
+</main>
+<footer>
+  tools.bountywall.com &nbsp;·&nbsp; timestamp converter &nbsp;·&nbsp;
+  <a href="/" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">all tools</a>
+  &nbsp;·&nbsp;
+  <a href="https://bountywall.com/privacy.html" style="color:var(--ink-light);text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--ink-light)'">Privacy Policy</a>
+</footer>
+<script>
+// ── LIVE CLOCK ──
+function tickClock() {
+  const now = new Date();
+  const ts  = Math.floor(now.getTime()/1000);
+  document.getElementById('clockTime').textContent =
+    now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clockTs').textContent = ts.toLocaleString();
+  document.getElementById('clockUtc').textContent =
+    now.toUTCString().replace(' GMT','') + ' UTC';
+  document.getElementById('clockIso').textContent = now.toISOString();
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+function useNow() {
+  const ts = Math.floor(Date.now()/1000);
+  document.getElementById('unixInput').value = ts;
+  unixToHuman();
+  // Also set datetime-local
+  const local = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const localStr = `${local.getFullYear()}-${pad(local.getMonth()+1)}-${pad(local.getDate())}T${pad(local.getHours())}:${pad(local.getMinutes())}`;
+  document.getElementById('dateInput').value = localStr;
+  humanToUnix();
+  // Diff defaults
+  document.getElementById('diffEnd').value = localStr;
+}
+
+// ── UNIX → HUMAN ──
+function unixToHuman() {
+  const raw = document.getElementById('unixInput').value.trim();
+  if(!raw) { document.getElementById('unixResults').innerHTML=''; return; }
+  let ts = parseFloat(raw);
+  if(document.getElementById('unixUnit').value === 'ms') ts = ts/1000;
+  if(isNaN(ts)) return;
+
+  const d = new Date(ts*1000);
+  if(isNaN(d.getTime())) return;
+
+  const pad = n => String(n).padStart(2,'0');
+  const results = [
+    { label:'Local Date & Time', value: d.toLocaleString() },
+    { label:'UTC Date & Time',   value: d.toUTCString() },
+    { label:'ISO 8601',          value: d.toISOString() },
+    { label:'Date only',         value: d.toLocaleDateString() },
+    { label:'Time only (local)', value: d.toLocaleTimeString() },
+    { label:'Day of week',       value: d.toLocaleDateString([], {weekday:'long'}) },
+    { label:'Unix (seconds)',    value: Math.floor(ts).toString() },
+    { label:'Unix (milliseconds)',value: (Math.floor(ts)*1000).toString() },
+  ];
+
+  document.getElementById('unixResults').innerHTML = results.map((r,i) =>
+    `<div class="result-row">
+      <div><div class="result-label">${r.label}</div><div class="result-value">${r.value}</div></div>
+      <button class="copy-btn" onclick="copyText('${r.value.replace(/'/g,"\\'")}',this)">Copy</button>
+    </div>`
+  ).join('');
+
+  // Relative time
+  const diffMs = Date.now() - d.getTime();
+  document.getElementById('unixRelative').innerHTML =
+    `<div class="relative-badge">🕐 ${relativeTime(diffMs)}</div>`;
+}
+
+// ── HUMAN → UNIX ──
+function humanToUnix() {
+  const val = document.getElementById('dateInput').value;
+  if(!val) { document.getElementById('humanResults').innerHTML=''; return; }
+  let d;
+  if(document.getElementById('tzSelect').value === 'UTC') {
+    d = new Date(val + ':00Z');
+  } else {
+    d = new Date(val);
+  }
+  if(isNaN(d.getTime())) return;
+  const ts = Math.floor(d.getTime()/1000);
+  const results = [
+    { label:'Unix (seconds)',     value: ts.toString() },
+    { label:'Unix (milliseconds)',value: (ts*1000).toString() },
+    { label:'ISO 8601',           value: d.toISOString() },
+    { label:'UTC String',         value: d.toUTCString() },
+  ];
+  document.getElementById('humanResults').innerHTML = results.map(r =>
+    `<div class="result-row">
+      <div><div class="result-label">${r.label}</div><div class="result-value">${r.value}</div></div>
+      <button class="copy-btn" onclick="copyText('${r.value}',this)">Copy</button>
+    </div>`
+  ).join('');
+}
+
+// ── DATE DIFF ──
+function calcDiff() {
+  const s = document.getElementById('diffStart').value;
+  const e = document.getElementById('diffEnd').value;
+  if(!s||!e) return;
+  const ds = new Date(s), de = new Date(e);
+  let diffMs = de - ds;
+  const sign = diffMs < 0 ? '-' : '';
+  diffMs = Math.abs(diffMs);
+  const secs  = Math.floor(diffMs/1000);
+  const mins  = Math.floor(secs/60);
+  const hours = Math.floor(mins/60);
+  const days  = Math.floor(hours/24);
+  const weeks = Math.floor(days/7);
+  const months= Math.floor(days/30.4375);
+  const years = Math.floor(days/365.25);
+  const wrap = document.getElementById('diffResult');
+  wrap.style.display='';
+  wrap.innerHTML = `
+    <div class="diff-main">${sign}${days.toLocaleString()} days</div>
+    <div class="diff-sub">
+      ${sign}${years} years · ${sign}${months} months · ${sign}${weeks} weeks<br/>
+      ${sign}${hours.toLocaleString()} hours · ${sign}${mins.toLocaleString()} minutes · ${sign}${secs.toLocaleString()} seconds<br/>
+      ${sign}${diffMs.toLocaleString()} milliseconds
+    </div>`;
+}
+
+// ── RELATIVE TIME ──
+function relativeTime(diffMs) {
+  const abs = Math.abs(diffMs);
+  const future = diffMs < 0;
+  const s = Math.floor(abs/1000);
+  const m = Math.floor(s/60), h = Math.floor(m/60), d = Math.floor(h/24);
+  const mo = Math.floor(d/30), y = Math.floor(d/365);
+  let str;
+  if(s<60) str=s+'s';
+  else if(m<60) str=m+' min';
+  else if(h<24) str=h+' hr';
+  else if(d<30) str=d+' days';
+  else if(mo<12) str=mo+' months';
+  else str=y+' years';
+  return future ? 'in '+str : str+' ago';
+}
+
+// ── REFERENCE TABLE ──
+const REF_EVENTS = [
+  ['Unix Epoch',         0],
+  ['Y2K',                946684800],
+  ['9/11',               1000166400],
+  ['iPhone launch',      1184371200],
+  ['Bitcoin genesis',    1231006505],
+  ['COVID-19 declared',  1583798400],
+  ['Y2K38 overflow',     2147483647],
+  ['Now (approx)',       Math.floor(Date.now()/1000)],
+];
+document.getElementById('refBody').innerHTML = REF_EVENTS.map(([name,ts]) =>
+  `<tr><td>${name}</td><td>${ts.toLocaleString()}</td><td>${new Date(ts*1000).toUTCString().split(' ').slice(0,4).join(' ')}</td></tr>`
+).join('');
+
+// ── COPY ──
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✓';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); },1800);
+  });
+}
+
+// ── INIT ──
+useNow();
+const now = new Date();
+const pad = n=>String(n).padStart(2,'0');
+const weekAgo = new Date(now - 7*86400*1000);
+document.getElementById('diffStart').value = `${weekAgo.getFullYear()}-${pad(weekAgo.getMonth()+1)}-${pad(weekAgo.getDate())}T${pad(weekAgo.getHours())}:${pad(weekAgo.getMinutes())}`;
+calcDiff();
+</script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Online Tools — BountyWall</title>
+  <meta name="description" content="Free online tools — percentage calculator, unit converter, word counter, PDF tools, color converter, developer utilities and more. Fast, free, no signup needed."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="icon" type="image/x-icon" href="https://bountywall.com/bounty.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --off-white:#f4f7fd;
+      --blue-50:#eff5ff; --blue-100:#dbeafe; --blue-200:#bfdbfe;
+      --blue-400:#60a5fa; --blue-600:#2563eb; --blue-700:#1d4ed8;
+      --ink:#0d1b2e; --ink-mid:#3d5168; --ink-light:#8fa3bb;
+      --border:#d6e4f7; --border-dark:#b8d0ed;
+      --green:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
+      --mono:'DM Mono',monospace; --serif:'Instrument Serif',serif; --sans:'DM Sans',sans-serif;
+
+      /* category colours */
+      --c-math-text:#1e40af;   --c-math-bg:#eff5ff;   --c-math-border:#bfdbfe;   --c-math-accent:#2563eb;
+      --c-text-text:#065f46;   --c-text-bg:#ecfdf5;   --c-text-border:#a7f3d0;   --c-text-accent:#059669;
+      --c-files-text:#92400e;  --c-files-bg:#fffbeb;  --c-files-border:#fde68a;  --c-files-accent:#d97706;
+      --c-design-text:#86198f; --c-design-bg:#fdf4ff; --c-design-border:#e879f9; --c-design-accent:#a21caf;
+      --c-dev-text:#5b21b6;    --c-dev-bg:#f5f3ff;    --c-dev-border:#ddd6fe;    --c-dev-accent:#7c3aed;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--off-white);color:var(--ink);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+
+    body::before{content:'';position:fixed;inset:0;
+      background:
+        radial-gradient(ellipse 70% 40% at 15% 0%,rgba(37,99,235,0.07) 0%,transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 100%,rgba(124,58,237,0.06) 0%,transparent 60%),
+        radial-gradient(circle,#c3d9f5 1px,transparent 1px);
+      background-size:100% 100%,100% 100%,28px 28px;
+      pointer-events:none;z-index:0;}
+    body::after{content:'';position:fixed;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--blue-700),var(--blue-400),#7c3aed);z-index:200;}
+
+    /* ── HEADER ── */
+    header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.94);
+      backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+      padding:0 44px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{display:flex;align-items:baseline;gap:1px;text-decoration:none;}
+    .logo-main{font-family:var(--serif);font-size:23px;color:var(--blue-700);}
+    .logo-dot{font-family:var(--mono);font-size:14px;color:var(--blue-400);}
+    .logo-tld{font-family:var(--mono);font-size:13px;color:var(--ink-light);}
+    .logo-sub{font-family:var(--mono);font-size:11px;color:var(--c-dev-accent);margin-left:6px;
+      background:var(--c-dev-bg);border:1px solid var(--c-dev-border);border-radius:4px;padding:1px 7px;}
+    .back-btn{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+      color:var(--ink-light);text-decoration:none;border:1px solid var(--border);
+      border-radius:6px;padding:6px 14px;transition:all 0.12s;}
+    .back-btn:hover{border-color:var(--blue-400);color:var(--blue-600);}
+
+    /* ── MAIN ── */
+    main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:52px 28px 100px;}
+
+    /* ── HERO ── */
+    .hero{margin-bottom:40px;animation:fadeUp 0.4s ease both;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;
+      font-family:var(--mono);font-size:10px;color:var(--green);
+      background:var(--green-bg);border:1px solid var(--green-border);
+      border-radius:20px;padding:4px 14px;margin-bottom:18px;}
+    .hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+      animation:glow 2s ease-in-out infinite;}
+    @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,0.5);}50%{box-shadow:0 0 0 5px rgba(5,150,105,0);}}
+    .hero h1{font-family:var(--serif);font-size:clamp(34px,5vw,56px);
+      line-height:1.06;letter-spacing:-0.6px;color:var(--ink);margin-bottom:12px;}
+    .hero h1 em{font-style:italic;color:var(--blue-600);}
+    .hero p{font-family:var(--mono);font-size:11.5px;color:var(--ink-light);line-height:1.9;max-width:480px;}
+
+    /* ── STATS ROW ── */
+    .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;
+      animation:fadeUp 0.4s ease both;animation-delay:0.04s;}
+    .stat-chip{font-family:var(--mono);font-size:10px;color:var(--ink-mid);
+      background:white;border:1px solid var(--border);border-radius:20px;
+      padding:5px 14px;display:flex;align-items:center;gap:6px;
+      box-shadow:0 1px 4px rgba(30,58,95,0.05);}
+    .stat-chip strong{color:var(--blue-600);}
+
+    /* ── FILTER TABS ── */
+    .filter-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;
+      animation:fadeUp 0.4s ease both;animation-delay:0.06s;}
+    .filter-tab{font-family:var(--mono);font-size:10px;padding:6px 14px;border-radius:20px;
+      border:1px solid var(--border);background:white;color:var(--ink-light);
+      cursor:pointer;transition:all 0.12s;white-space:nowrap;}
+    .filter-tab:hover{border-color:var(--blue-400);color:var(--blue-600);}
+    .filter-tab.active{background:var(--ink);color:white;border-color:var(--ink);}
+    .filter-tab.active-math{background:var(--c-math-accent);border-color:var(--c-math-accent);color:white;}
+    .filter-tab.active-text{background:var(--c-text-accent);border-color:var(--c-text-accent);color:white;}
+    .filter-tab.active-files{background:var(--c-files-accent);border-color:var(--c-files-accent);color:white;}
+    .filter-tab.active-design{background:var(--c-design-accent);border-color:var(--c-design-accent);color:white;}
+    .filter-tab.active-dev{background:var(--c-dev-accent);border-color:var(--c-dev-accent);color:white;}
+
+    /* ── TOOL COUNT ── */
+    .tool-count{font-family:var(--mono);font-size:10px;color:var(--ink-light);
+      margin-bottom:16px;animation:fadeUp 0.4s ease both;animation-delay:0.07s;}
+    .tool-count strong{color:var(--ink-mid);}
+
+    /* ── FEATURED TOOL (PDF — most powerful) ── */
+    .featured-tool{display:grid;grid-template-columns:260px 1fr;
+      background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;
+      box-shadow:0 4px 24px rgba(30,58,95,0.1);text-decoration:none;color:inherit;
+      margin-bottom:16px;transition:transform 0.18s,box-shadow 0.18s;
+      animation:fadeUp 0.4s ease both;animation-delay:0.08s;}
+    .featured-tool:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(30,58,95,0.15);}
+
+    .featured-visual{background:linear-gradient(135deg,#78350f 0%,#b45309 50%,#d97706 100%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:36px 28px;position:relative;overflow:hidden;gap:12px;}
+    .featured-visual::before{content:'PDF';position:absolute;
+      font-family:var(--mono);font-size:100px;font-weight:700;
+      color:rgba(255,255,255,0.06);line-height:1;bottom:-10px;right:-8px;pointer-events:none;}
+    .featured-icon-wrap{width:64px;height:64px;border-radius:16px;
+      background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);
+      display:flex;align-items:center;justify-content:center;font-size:30px;
+      position:relative;z-index:1;}
+    .featured-capabilities{display:flex;flex-direction:column;gap:6px;
+      position:relative;z-index:1;width:100%;}
+    .feat-cap{font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,0.75);
+      display:flex;align-items:center;gap:6px;}
+    .feat-cap::before{content:'✓';color:rgba(255,255,255,0.9);font-weight:700;}
+
+    .featured-body{padding:28px 32px;display:flex;flex-direction:column;justify-content:center;gap:11px;}
+    .featured-badge{display:inline-flex;align-items:center;gap:6px;width:fit-content;
+      font-family:var(--mono);font-size:9px;color:white;background:#dc2626;
+      border-radius:4px;padding:3px 9px;text-transform:uppercase;letter-spacing:0.8px;}
+    .featured-cat{font-family:var(--mono);font-size:9.5px;
+      color:var(--c-files-text);background:var(--c-files-bg);
+      border:1px solid var(--c-files-border);border-radius:4px;
+      padding:2px 8px;display:inline-block;width:fit-content;}
+    .featured-title{font-family:var(--serif);font-size:clamp(20px,2.5vw,26px);
+      color:var(--ink);line-height:1.18;letter-spacing:-0.2px;}
+    .featured-desc{font-family:var(--mono);font-size:10.5px;color:var(--ink-light);line-height:1.85;}
+    .featured-tags{display:flex;gap:6px;flex-wrap:wrap;}
+    .ftag{font-family:var(--mono);font-size:9px;color:var(--ink-light);
+      background:var(--off-white);border:1px solid var(--border);
+      border-radius:4px;padding:2px 8px;}
+    .featured-cta{font-family:var(--mono);font-size:11px;color:var(--blue-600);
+      font-weight:500;display:flex;align-items:center;gap:5px;margin-top:2px;}
+    .featured-cta::after{content:'→';transition:transform 0.15s;}
+    .featured-tool:hover .featured-cta::after{transform:translateX(4px);}
+
+    /* ── TOOLS GRID ── */
+    .tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+      animation:fadeUp 0.4s ease both;animation-delay:0.1s;}
+
+    .tool-card{background:white;border:1px solid var(--border);border-radius:13px;
+      text-decoration:none;color:inherit;overflow:hidden;display:flex;flex-direction:column;
+      box-shadow:0 2px 10px rgba(30,58,95,0.05);
+      transition:transform 0.18s,box-shadow 0.18s,border-color 0.18s;}
+    .tool-card:hover{transform:translateY(-3px);
+      box-shadow:0 10px 32px rgba(30,58,95,0.12);border-color:var(--blue-200);}
+
+    /* coloured top accent per category */
+    .tool-card::before{content:'';display:block;height:3px;width:100%;}
+    .tool-card.cat-math::before{background:linear-gradient(90deg,var(--c-math-accent),var(--blue-400));}
+    .tool-card.cat-text::before{background:linear-gradient(90deg,var(--c-text-accent),#34d399);}
+    .tool-card.cat-files::before{background:linear-gradient(90deg,var(--c-files-accent),#fbbf24);}
+    .tool-card.cat-design::before{background:linear-gradient(90deg,var(--c-design-accent),#e879f9);}
+    .tool-card.cat-dev::before{background:linear-gradient(90deg,var(--c-dev-accent),#a78bfa);}
+
+    .card-inner{padding:18px 20px;display:flex;flex-direction:column;gap:9px;flex:1;}
+    .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+    .card-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-size:19px;
+      border:1px solid var(--border);}
+    .icon-math{background:var(--c-math-bg);}
+    .icon-text{background:var(--c-text-bg);}
+    .icon-files{background:var(--c-files-bg);}
+    .icon-design{background:var(--c-design-bg);}
+    .icon-dev{background:var(--c-dev-bg);}
+
+    .card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+    .badge-new{font-family:var(--mono);font-size:8px;color:var(--green);
+      background:var(--green-bg);border:1px solid var(--green-border);
+      border-radius:4px;padding:2px 6px;text-transform:uppercase;letter-spacing:0.6px;}
+    .badge-hot{font-family:var(--mono);font-size:8px;color:white;
+      background:#dc2626;border-radius:4px;padding:2px 6px;
+      text-transform:uppercase;letter-spacing:0.6px;}
+
+    .card-cat{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:4px;
+      display:inline-block;width:fit-content;margin-top:2px;}
+    .cat-math{color:var(--c-math-text);background:var(--c-math-bg);border:1px solid var(--c-math-border);}
+    .cat-text{color:var(--c-text-text);background:var(--c-text-bg);border:1px solid var(--c-text-border);}
+    .cat-files{color:var(--c-files-text);background:var(--c-files-bg);border:1px solid var(--c-files-border);}
+    .cat-design{color:var(--c-design-text);background:var(--c-design-bg);border:1px solid var(--c-design-border);}
+    .cat-dev{color:var(--c-dev-text);background:var(--c-dev-bg);border:1px solid var(--c-dev-border);}
+
+    .card-name{font-family:var(--serif);font-size:17px;color:var(--ink);line-height:1.25;}
+    .card-desc{font-family:var(--mono);font-size:10px;color:var(--ink-light);line-height:1.8;flex:1;}
+
+    /* feature chips inside card */
+    .card-features{display:flex;gap:5px;flex-wrap:wrap;}
+    .feat-chip{font-family:var(--mono);font-size:8.5px;color:var(--ink-light);
+      background:var(--off-white);border:1px solid var(--border);
+      border-radius:3px;padding:1px 6px;}
+
+    .card-footer{display:flex;align-items:center;justify-content:space-between;
+      padding:10px 20px;border-top:1px solid var(--border);background:#fafcff;}
+    .card-open{font-family:var(--mono);font-size:10px;color:var(--blue-600);
+      font-weight:500;display:flex;align-items:center;gap:3px;}
+    .card-open::after{content:'→';transition:transform 0.15s;}
+    .tool-card:hover .card-open::after{transform:translateX(3px);}
+    .card-free{font-family:var(--mono);font-size:8.5px;color:var(--green);
+      background:var(--green-bg);border:1px solid var(--green-border);
+      border-radius:4px;padding:2px 6px;}
+
+    /* hidden when filtered */
+    .tool-card.filtered-out,.featured-tool.filtered-out{display:none;}
+    .empty-state{display:none;text-align:center;padding:60px 20px;
+      font-family:var(--mono);font-size:12px;color:var(--ink-light);line-height:2;}
+    .empty-state.show{display:block;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    footer{position:relative;z-index:1;text-align:center;padding:28px;
+      font-family:var(--mono);font-size:10px;color:var(--ink-light);
+      border-top:1px solid var(--border);letter-spacing:0.4px;line-height:2.2;}
+    footer a{color:var(--ink-light);text-decoration:none;transition:color 0.12s;}
+    footer a:hover{color:var(--blue-600);}
+
+    @media(max-width:700px){
+      header{padding:0 18px;}
+      main{padding:28px 14px 60px;}
+      .tools-grid{grid-template-columns:1fr 1fr;}
+      .featured-tool{grid-template-columns:1fr;}
+      .featured-visual{min-height:140px;}
+    }
+    @media(max-width:480px){
+      .tools-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="https://bountywall.com">
+    <span class="logo-main">BountyWall</span>
+    <span class="logo-dot">.</span>
+    <span class="logo-tld">com</span>
+    <span class="logo-sub">tools</span>
+  </a>
+  <a class="back-btn" href="https://bountywall.com">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    bountywall.com
+  </a>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      7 tools · 100% free · No signup · Runs in your browser
+    </div>
+    <h1>Free tools that<br/><em>actually work.</em></h1>
+    <p>No accounts, no ads, no uploads to a server. Everything runs locally in your browser — fast, private, and free forever.</p>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-chip"><strong>7</strong> tools available</div>
+    <div class="stat-chip"><strong>5</strong> categories</div>
+    <div class="stat-chip">✓ No signup needed</div>
+    <div class="stat-chip">✓ Nothing uploaded to servers</div>
+    <div class="stat-chip">✓ Works offline</div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-cat="all">All tools <span style="opacity:0.5">7</span></button>
+    <button class="filter-tab" data-cat="files">📄 Files &amp; PDF <span style="opacity:0.5">1</span></button>
+    <button class="filter-tab" data-cat="math">🔢 Math &amp; Numbers <span style="opacity:0.5">2</span></button>
+    <button class="filter-tab" data-cat="text">✍️ Text &amp; Writing <span style="opacity:0.5">1</span></button>
+    <button class="filter-tab" data-cat="design">🎨 Design &amp; Color <span style="opacity:0.5">1</span></button>
+    <button class="filter-tab" data-cat="dev">⌨️ Developer <span style="opacity:0.5">2</span></button>
+  </div>
+
+  <!-- TOOL COUNT -->
+  <div class="tool-count" id="toolCount"><strong>7</strong> tools</div>
+
+  <!-- FEATURED: PDF (most powerful / most useful) -->
+  <a class="featured-tool" href="/pdf.html" data-cat="files">
+    <div class="featured-visual">
+      <div class="featured-icon-wrap">📄</div>
+      <div class="featured-capabilities">
+        <div class="feat-cap">Merge multiple PDFs</div>
+        <div class="feat-cap">Split &amp; extract pages</div>
+        <div class="feat-cap">Rotate &amp; reorder</div>
+        <div class="feat-cap">Annotate &amp; add text</div>
+        <div class="feat-cap">No file uploads — ever</div>
+      </div>
+    </div>
+    <div class="featured-body">
+      <div class="featured-badge">🔥 Most popular</div>
+      <span class="featured-cat">📄 Files &amp; PDF</span>
+      <div class="featured-title">PDF Tools — Everything You Need in One Place</div>
+      <div class="featured-desc">Merge, split, compress, rotate, annotate and add text to PDFs without uploading anything to a server. Runs entirely in your browser using PDF.js — fast, private, and free.</div>
+      <div class="featured-tags">
+        <span class="ftag">Merge</span>
+        <span class="ftag">Split</span>
+        <span class="ftag">Rotate</span>
+        <span class="ftag">Annotate</span>
+        <span class="ftag">Add text</span>
+        <span class="ftag">Browser-only</span>
+      </div>
+      <div class="featured-cta">Open PDF Tools</div>
+    </div>
+  </a>
+
+  <!-- TOOLS GRID -->
+  <div class="tools-grid" id="grid">
+
+    <a class="tool-card cat-math" href="/percentage.html" data-cat="math">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon icon-math">%</div>
+          <div class="card-badges"><span class="badge-new">New</span></div>
+        </div>
+        <span class="card-cat cat-math">🔢 Math &amp; Numbers</span>
+        <div class="card-name">Percentage Calculator</div>
+        <div class="card-desc">What's X% of Y? What percent is X of Y? Percentage increase, decrease, and difference — all modes in one clean interface.</div>
+        <div class="card-features">
+          <span class="feat-chip">% of number</span>
+          <span class="feat-chip">% change</span>
+          <span class="feat-chip">% difference</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-free">Free</span>
+        <span class="card-open">Open tool</span>
+      </div>
+    </a>
+
+    <a class="tool-card cat-math" href="/unit.html" data-cat="math">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon icon-math">⚖️</div>
+          <div class="card-badges"><span class="badge-new">New</span></div>
+        </div>
+        <span class="card-cat cat-math">🔢 Math &amp; Numbers</span>
+        <div class="card-name">Unit Converter</div>
+        <div class="card-desc">100+ units across length, weight, temperature, speed, area, volume, data and energy. Instant conversion with no fuss.</div>
+        <div class="card-features">
+          <span class="feat-chip">Length</span>
+          <span class="feat-chip">Weight</span>
+          <span class="feat-chip">Temp</span>
+          <span class="feat-chip">Speed</span>
+          <span class="feat-chip">Data</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-free">Free</span>
+        <span class="card-open">Open tool</span>
+      </div>
+    </a>
+
+    <a class="tool-card cat-text" href="/wordcount.html" data-cat="text">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon icon-text">Aa</div>
+          <div class="card-badges"><span class="badge-new">New</span></div>
+        </div>
+        <span class="card-cat cat-text">✍️ Text &amp; Writing</span>
+        <div class="card-name">Word Counter</div>
+        <div class="card-desc">Live word, character, sentence and paragraph counts. Platform limits (Twitter, LinkedIn), keyword density, reading time estimate.</div>
+        <div class="card-features">
+          <span class="feat-chip">Read time</span>
+          <span class="feat-chip">Platform limits</span>
+          <span class="feat-chip">Keyword density</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-free">Free</span>
+        <span class="card-open">Open tool</span>
+      </div>
+    </a>
+
+    <a class="tool-card cat-design" href="/color.html" data-cat="design">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon icon-design">🎨</div>
+          <div class="card-badges"><span class="badge-new">New</span></div>
+        </div>
+        <span class="card-cat cat-design">🎨 Design &amp; Color</span>
+        <div class="card-name">Color Converter</div>
+        <div class="card-desc">Convert between HEX, RGB, HSL, HSB and CMYK. Color picker, contrast checker (WCAG), shades generator, Tailwind class finder.</div>
+        <div class="card-features">
+          <span class="feat-chip">HEX / RGB / HSL</span>
+          <span class="feat-chip">WCAG contrast</span>
+          <span class="feat-chip">Tailwind</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-free">Free</span>
+        <span class="card-open">Open tool</span>
+      </div>
+    </a>
+
+    <a class="tool-card cat-dev" href="/base64.html" data-cat="dev">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon icon-dev" style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--c-dev-accent);">01</div>
+          <div class="card-badges"><span class="badge-new">New</span></div>
+        </div>
+        <span class="card-cat cat-dev">⌨️ Developer</span>
+        <div class="card-name">Base64 Encoder</div>
+        <div class="card-desc">Encode and decode Base64 text, URLs and files instantly. URL-safe mode, live conversion — nothing leaves your browser.</div>
+        <div class="card-features">
+          <span class="feat-chip">Text encode/decode</span>
+          <span class="feat-chip">URL-safe mode</span>
+          <span class="feat-chip">File support</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-free">Free</span>
+        <span class="card-open">Open tool</span>
+      </div>
+    </a>
+
+    <a class="tool-card cat-dev" href="/timestamp.html" data-cat="dev">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon icon-dev">🕐</div>
+          <div class="card-badges"><span class="badge-new">New</span></div>
+        </div>
+        <span class="card-cat cat-dev">⌨️ Developer</span>
+        <div class="card-name">Timestamp Converter</div>
+        <div class="card-desc">Unix timestamp to human-readable date and back. Live clock, date difference calculator, ISO 8601, timezone support.</div>
+        <div class="card-features">
+          <span class="feat-chip">Unix ↔ Date</span>
+          <span class="feat-chip">ISO 8601</span>
+          <span class="feat-chip">Date diff</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-free">Free</span>
+        <span class="card-open">Open tool</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    No tools in this category yet.<br/>
+    <span style="font-size:10px">New tools are added regularly — check back soon.</span>
+  </div>
+
+</main>
+
+<footer>
+  tools.bountywall.com &nbsp;·&nbsp; free online tools &nbsp;·&nbsp;
+  <a href="https://bountywall.com">bountywall.com</a> &nbsp;·&nbsp;
+  <a href="https://articles.bountywall.com">articles</a> &nbsp;·&nbsp;
+  <a href="https://bountywall.com/earn.html">earn cash</a> &nbsp;·&nbsp;
+  <a href="https://bountywall.com/privacy.html">privacy</a>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.filter-tab');
+  const cards = document.querySelectorAll('.tool-card');
+  const featured = document.querySelector('.featured-tool');
+  const countEl = document.getElementById('toolCount');
+  const emptyState = document.getElementById('emptyState');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const cat = tab.dataset.cat;
+
+      tabs.forEach(t => { t.className = 'filter-tab'; });
+      tab.classList.add(cat === 'all' ? 'active' : 'active-' + cat);
+
+      const featMatch = cat === 'all' || featured.dataset.cat === cat;
+      featured.classList.toggle('filtered-out', !featMatch);
+
+      let visible = featMatch ? 1 : 0;
+      cards.forEach(card => {
+        const match = cat === 'all' || card.dataset.cat === cat;
+        card.classList.toggle('filtered-out', !match);
+        if (match) visible++;
+      });
+
+      countEl.innerHTML = '<strong>' + visible + '</strong> tool' + (visible !== 1 ? 's' : '') + (cat !== 'all' ? ' in this category' : '');
+      emptyState.classList.toggle('show', visible === 0);
+    });
+  });
+</script>
+
+</body>
+</html>
